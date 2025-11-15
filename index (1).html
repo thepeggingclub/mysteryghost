@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Profile</title>
+<style>
+    :root{
+        --bg:#f5f7fb;
+        --card:#fff;
+        --accent:#4f46e5;
+        --muted:#6b7280;
+        --shadow:0 6px 18px rgba(16,24,40,0.08);
+        --radius:14px;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    html,body{height:100%;}
+    body{
+        margin:0;
+        background:linear-gradient(180deg, #eef2ff 0%, var(--bg) 100%);
+        display:flex;
+        align-items:flex-start;
+        justify-content:center;
+        padding:48px 18px;
+        color:#0f172a;
+    }
+
+    .container{
+        width:100%;
+        max-width:920px;
+    }
+
+    .profile-card{
+        background:var(--card);
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:36px;
+        text-align:center;
+    }
+
+    /* avatar */
+    .avatar{
+        width:148px;
+        height:148px;
+        margin:0 auto 18px;
+        border-radius:50%;
+        overflow:hidden;
+        border:6px solid rgba(79,70,229,0.08);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:linear-gradient(180deg, rgba(79,70,229,0.06), rgba(79,70,229,0.01));
+    }
+    .avatar img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+        border-radius:50%;
+    }
+
+    /* name and verified icon */
+    .name {
+        font-size:1.6rem;
+        margin:6px 0 8px;
+        display:inline-flex;
+        gap:10px;
+        align-items:center;
+        font-weight:600;
+        color:#0b1220;
+    }
+    .verified {
+        width:20px;
+        height:20px;
+        display:inline-block;
+        vertical-align:middle;
+        color:var(--accent);
+    }
+    .sub{
+        color:var(--muted);
+        margin-bottom:18px;
+        font-size:0.95rem;
+    }
+
+    /* actions */
+    .actions{
+        display:flex;
+        gap:10px;
+        justify-content:center;
+        flex-wrap:wrap;
+        margin:18px 0 26px;
+    }
+    .btn{
+        background:#fff;
+        border:1px solid #eef2ff;
+        padding:10px 14px;
+        border-radius:10px;
+        font-weight:600;
+        color:#0b1220;
+        text-decoration:none;
+        display:inline-flex;
+        gap:8px;
+        align-items:center;
+        box-shadow:0 4px 12px rgba(16,24,40,0.04);
+        cursor:pointer;
+        transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:hover{ transform:translateY(-4px); box-shadow:0 10px 30px rgba(16,24,40,0.08); }
+    .btn.primary{
+        background:linear-gradient(90deg,var(--accent),#6366f1);
+        color:#fff;
+        border:0;
+    }
+    .btn .ico{ width:16px; height:16px; display:inline-block; opacity:0.95; }
+
+    /* gallery */
+    .gallery{
+        margin-top:6px;
+        text-align:left;
+    }
+    .gallery h2{
+        margin:0 0 12px;
+        font-size:1.05rem;
+        color:#111827;
+    }
+    .grid{
+        display:grid;
+        grid-template-columns:repeat(3, 1fr);
+        gap:10px;
+    }
+    .grid img{
+        width:100%;
+        height:160px;
+        object-fit:cover;
+        border-radius:10px;
+        display:block;
+        transition:transform .14s ease, box-shadow .14s ease;
+    }
+    .grid img:hover{ transform:scale(1.03); box-shadow:0 12px 30px rgba(16,24,40,0.08); }
+
+    /* admin comment */
+    .admin-comment{
+        background:#f8faff;
+        border-radius:var(--radius);
+        padding:20px;
+        margin:28px 0 0;
+        border:1px solid rgba(79,70,229,0.08);
+        text-align:left;
+    }
+    .admin-header{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:12px;
+    }
+    .admin-avatar{
+        width:44px;
+        height:44px;
+        border-radius:50%;
+        overflow:hidden;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:#e0e7ff;
+        flex-shrink:0; /* Prevents squishing on mobile */
+    }
+    .admin-avatar img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+        border-radius:50%;
+    }
+    .admin-info{
+        flex:1;
+        min-width:0; /* Prevents text overflow issues */
+    }
+    .admin-name{
+        font-weight:600;
+        color:#0b1220;
+        display:flex;
+        align-items:center;
+        gap:6px;
+        font-size:0.95rem;
+    }
+    .admin-badge{
+        background:#4f46e5;
+        color:white;
+        font-size:0.7rem;
+        padding:2px 6px;
+        border-radius:4px;
+        font-weight:600;
+        flex-shrink:0; /* Prevents badge from shrinking */
+    }
+    .admin-role{
+        color:var(--muted);
+        font-size:0.85rem;
+        margin-top:2px;
+    }
+    .admin-text{
+        color:#374151;
+        line-height:1.5;
+        font-size:0.95rem;
+    }
+
+    /* responsive */
+    @media (max-width:740px){
+        .grid{ grid-template-columns:repeat(2,1fr); }
+        .avatar{ width:120px; height:120px; }
+        .admin-avatar{
+            width:50px; /* Slightly larger on mobile for better visibility */
+            height:50px;
+        }
+        .admin-header{
+            gap:14px; /* More space on mobile */
+        }
+    }
+    @media (max-width:420px){
+        .grid img{ height:120px; }
+        .actions{ gap:8px; }
+        .admin-comment{
+            padding:16px; /* Slightly less padding on very small screens */
+        }
+        .admin-name{
+            font-size:0.9rem; /* Slightly smaller text on mobile */
+        }
+        .admin-text{
+            font-size:0.9rem; /* Slightly smaller text on mobile */
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-card" role="region" aria-label="Profile card">
+            <div class="avatar" aria-hidden="false">
+                <img src="https://i.postimg.cc/ryxZPSgS/20251112-005349.jpg" alt="Profile picture">
+            </div>
+
+            <div>
+                <div class="name" aria-label="Profile name">
+                    Mystery Ghost
+                    <!-- verified icon -->
+                    <svg class="verified" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.3" opacity="0.18"/>
+                        <path d="M9.5 12.5l1.7 1.7L15 10.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="sub">Professional creator · Available for messages</div>
+            </div>
+
+            <!-- actions -->
+            <div class="actions" id="actions">
+                <!-- Web Share (native share) -->
+                <button class="btn primary" id="shareBtn" title="Share / Message">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 8.5V5a3 3 0 10-3 3h3zM8 15.5v3a3 3 0 103-3h-3z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Message / Share
+                </button>
+
+                <!-- email -->
+                <a class="btn" id="emailBtn" href="mailto:ghostmistress088@gmail.com?subject=Hello" title="Email">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7.5l9 6 9-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Email
+                </a>
+
+                <!-- Telegram -->
+                <a class="btn" id="tgBtn" href="https://t.me/mysteryghos" target="_blank" rel="noopener noreferrer" title="Telegram">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 2L2 12.5l5 2 2 6 3-4 6 4L22 2z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Telegram
+                </a>
+            </div>
+
+            <!-- gallery -->
+            <section class="gallery" aria-label="Gallery">
+                <h2>Gallery</h2>
+                <div class="grid" id="gallery">
+                    <img src="https://i.postimg.cc/ZK7jyC06/20251115-113634.jpg" alt="Gallery image 1">
+                    <img src="https://i.postimg.cc/bNCL2sdS/20251115-113651.jpg" alt="Gallery image 2">
+                    <img src="https://i.postimg.cc/wTfFs73g/20251115-113729.jpg" alt="Gallery image 3">
+                    <img src="https://i.postimg.cc/HsZ37VjL/20251115-113806.jpg" alt="Gallery image 4">
+                    <img src="https://i.postimg.cc/SQGgkZhV/20251115-114126.jpg" alt="Gallery image 5">
+                </div>
+            </section>
+
+            <!-- admin comment - now after gallery -->
+            <div class="admin-comment">
+                <div class="admin-header">
+                    <div class="admin-avatar">
+                        <img src="https://i.postimg.cc/G3XdHnwX/53c142cd-54c5-4c82-aa32-75b0b2af84b9-500x600-2576-n1.jpg" alt="SiteAdminVenessa profile picture">
+                    </div>
+                    <div class="admin-info">
+                        <div class="admin-name">
+                            SiteAdminVenessa
+                            <span class="admin-badge">VERIFIED</span>
+                        </div>
+                        <div class="admin-role">Site Administrator</div>
+                    </div>
+                </div>
+                <div class="admin-text">
+                    "Mystery Ghost is one of our most exceptional mistresses, consistently delivering unforgettable experiences with her unique style and commanding presence. Her dedication to the craft and attention to detail make her a standout creator on our platform. Highly recommended for those seeking a truly transformative journey."
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Minimal JS to show/hide actions depending on platform capabilities.
+    (function(){
+        // Show Web Share button only when available
+        const shareBtn = document.getElementById('shareBtn');
+        if (navigator.share) {
+            shareBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.share({
+                        title: document.title,
+                        text: 'Hi — check this profile',
+                        url: location.href
+                    });
+                } catch (e) {
+                    // ignore cancel
+                }
+            });
+        } else {
+            // fallback: change to copy link
+            shareBtn.textContent = 'Copy link';
+            shareBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(location.href);
+                    shareBtn.textContent = 'Link copied';
+                    setTimeout(()=> shareBtn.textContent = 'Copy link', 1400);
+                } catch (err) {
+                    alert('Copy failed. Use the buttons to message.');
+                }
+            });
+        }
+
+        // Simple lightbox for gallery images
+        document.getElementById('gallery').addEventListener('click', (e) => {
+            if(e.target.tagName !== 'IMG') return;
+            const src = e.target.src;
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;inset:0;background:rgba(2,6,23,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;';
+            const img = document.createElement('img');
+            img.src = src;
+            img.style.maxWidth = '92%';
+            img.style.maxHeight = '92%';
+            img.style.borderRadius = '10px';
+            overlay.appendChild(img);
+            overlay.addEventListener('click', ()=> document.body.removeChild(overlay));
+            document.body.appendChild(overlay);
+        });
+
+    })();
+</script>
+</body>
+</html>
